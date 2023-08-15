@@ -27,12 +27,15 @@ jobs:
           - id: 0
             url: "https://nodes.havenprotocol.org:443"
             name: "mainnet"
+            cloudfront: ${{ secrets.CLOUDFRONT_MAINNET }}
           - id: 1
             url: "https://nodes-testnet.havenprotocol.org:443"
             name: "testnet"
+            cloudfront: ${{ secrets.CLOUDFRONT_TESTNET }}
           - id: 2
             url: "https://nodes-stagenet.havenprotocol.org:443"
             name: "stagenet"
+            cloudfront: ${{ secrets.CLOUDFRONT_STAGENET }}
 
     steps:
     - uses: actions/checkout@v3
@@ -95,6 +98,12 @@ jobs:
         AWS_REGION: eu-west-1
         S3_BUCKET: haven-vault-${{matrix.network.name}}
         FILE: ./client/build
+    - name: invalidate cache
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{matrix.network.cloudfront}}
     - name: notification
       env:
         BINARY_NAME: /web_build-${{matrix.network.name}}.tar.gz
