@@ -91,11 +91,11 @@ jobs:
       run: |
           sh './sh/make.sh'
 
-    - name: Upload Build
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ matrix.system.os }}-${{ matrix.network.name }}
-        path: haven-desktop-app/out/make/
+#    - name: Upload Build
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: ${{ matrix.system.os }}-${{ matrix.network.name }}
+#        path: haven-desktop-app/out/make/
 
     - name: Package Desktop Build
       run: |
