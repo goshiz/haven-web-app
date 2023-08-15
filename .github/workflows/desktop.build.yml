@@ -103,7 +103,9 @@ jobs:
         ls -al
         pwd
         zip /home/runner/work/haven-web-app/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
-
+        cd /home/runner/work/haven-web-app/
+        ls -al
+        pwd
     - name: Upload Haven Desktop Build
       uses: a-sync/s3-uploader@master
       with:
