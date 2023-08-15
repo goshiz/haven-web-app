@@ -98,12 +98,12 @@ jobs:
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: eu-west-1
+        AWS_DEFAULT_REGION: "eu-west-1"
         S3_BUCKET: ${{ secrets.AWS_BUCKET }}
         FILE: ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         S3_KEY: binaries/${{github.ref_name}}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
       run:
-        aws s3 cp ${FILE} s3://${S3_BUCKET}/${S3_KEY} --region ${AWS_REGION} --acl public-read
+        aws s3 cp ${FILE} s3://${S3_BUCKET}/${S3_KEY} --acl public-read
 
     - name: notification
       env:
