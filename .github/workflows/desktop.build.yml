@@ -102,7 +102,7 @@ jobs:
         cd haven-desktop-app/out/make/${{ matrix.system.path }}
         ls -al
         pwd
-        zip ../desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip .
+        zip ../desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
 
     - name: Upload Haven Desktop Build
       uses: a-sync/s3-uploader@master
