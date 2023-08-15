@@ -116,7 +116,7 @@ jobs:
         AWS_REGION: eu-west-1
         S3_BUCKET: ${{ secrets.AWS_BUCKET }}
         FILE: ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
-        S3_KEY: binaries/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        S3_KEY: binaries/${{github.ref_name}}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
     - name: notification
       env:
         BINARY_NAME: /desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
