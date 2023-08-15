@@ -20,22 +20,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cloudfront Purge Cache
-        uses: unfor19/install-aws-cli-action@master
-        with:
-          version: 2
-      - run: |
-          aws s3 ls s3://haven-docs
-          aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_MAINNET }} --paths "/*"
-          aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_STAGENET }}  --paths "/*"
-          aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_TESTNET }}  --paths "/*"
-        shell: bash
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: eu-west-1
+#      - name: Install AWS CLI
+#        uses: unfor19/install-aws-cli-action@master
+#        with:
+#          version: 2
+#      - name: Cloudfront Purge Cache
+#        run: |
+#          aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_MAINNET }} --paths "/*"
+#          aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_STAGENET }}  --paths "/*"
+#          aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_TESTNET }}  --paths "/*"
+#        shell: bash
+#        env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          AWS_DEFAULT_REGION: eu-west-1
       - name: Cloudflare Purge Cache
-        uses: jakejarvis/cloudflare-purge-action@v0.3.0
+        uses: jakejarvis/cloudflare-purge-action@master
         env:
           CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
           CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
