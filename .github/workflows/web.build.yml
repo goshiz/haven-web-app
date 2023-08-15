@@ -100,7 +100,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: eu-west-1
         S3_BUCKET: haven-vault-${{matrix.network.name}}
-        FILE: ./client/build/*
+        FILE: ./client/build/
         S3_KEY: /
     - name: notification
       env:

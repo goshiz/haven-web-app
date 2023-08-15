@@ -115,7 +115,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: eu-west-1
         S3_BUCKET: ${{ secrets.AWS_BUCKET }}
-        FILE: /home/runner/work/haven-web-app/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        FILE: desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         S3_KEY: binaries/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
     - name: notification
       env:
@@ -124,7 +124,7 @@ jobs:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       shell: bash
       run: |
-        export checksum=($(sha256sum ./haven-desktop-app/out/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip))
+        export checksum=($(sha256sum desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip))
         export payload='{"username": "Github", "content": "GUI (${{ matrix.system.os }}) for ${{matrix.network.name}} : '${BINARY_URL}${GITHUB_REF_NAME}${BINARY_NAME}' (sha256 checksum : '${checksum}')"}'
         echo $payload
         curl -X POST -H "Content-Type: application/json" -d "$payload" $DISCORD_WEBHOOK
@@ -134,7 +134,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: /home/runner/work/haven-web-app/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        file: desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         asset_name: desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         tag: ${{ github.ref }}
         overwrite: true
