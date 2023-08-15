@@ -90,6 +90,18 @@ jobs:
         S3_BUCKET: ${{ secrets.AWS_BUCKET }}
         FILE: ./client/web_build-${{matrix.network.name}}.tar.gz
         S3_KEY: binaries/${{github.ref_name}}/web_build-${{matrix.network.name}}.tar.gz
+
+    - name: Upload on web hosting
+      uses: a-sync/s3-uploader@master
+      with:
+        args: --acl public-read
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: eu-west-1
+        S3_BUCKET: haven-vault-${{matrix.network.name}}
+        FILE: ./client/build/*
+        S3_KEY: /
     - name: notification
       env:
         BINARY_NAME: /web_build-${{matrix.network.name}}.tar.gz
