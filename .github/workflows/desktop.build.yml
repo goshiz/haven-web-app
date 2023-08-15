@@ -102,7 +102,7 @@ jobs:
         cd haven-desktop-app/out/make/${{ matrix.system.path }}
         ls -al
         pwd
-        zip ../desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
+        zip /home/runner/work/haven-web-app/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
 
     - name: Upload Haven Desktop Build
       uses: a-sync/s3-uploader@master
@@ -113,7 +113,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: eu-west-1
         S3_BUCKET: ${{ secrets.AWS_BUCKET }}
-        FILE: haven-desktop-app/out/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        FILE: /home/runner/work/haven-web-app/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         S3_KEY: binaries/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
     - name: notification
       env:
@@ -132,7 +132,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./haven-desktop-app/out/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        file: /home/runner/work/haven-web-app/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         asset_name: desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         tag: ${{ github.ref }}
         overwrite: true
