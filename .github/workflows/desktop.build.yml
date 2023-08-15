@@ -103,7 +103,8 @@ jobs:
         FILE: ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         S3_KEY: binaries/${{github.ref_name}}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
       run:
-        aws s3 cp ${FILE} s3://${S3_BUCKET}/${S3_KEY} --acl public-read
+
+        aws s3 cp ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip s3://${{ secrets.AWS_BUCKET }}/binaries/${{github.ref_name}}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip --acl public-read
 
     - name: notification
       env:
