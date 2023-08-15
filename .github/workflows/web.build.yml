@@ -123,13 +123,18 @@ jobs:
       - web-build
     steps:
       - name: Cloudfront Purge Cache
+        uses: unfor19/install-aws-cli-action@master
+        with:
+          version: 2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
+      - run: |
+          aws --version
           aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_MAINNET }}
           aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_STAGENET }}
           aws cloudfront create-invalidation --debug --distribution-id ${{ secrets.CLOUDFRONT_TESTNET }}
+        shell: bash
       - name: Cloudflare Purge Cache
         uses: jakejarvis/cloudflare-purge-action@v0.3.0
         env:
