@@ -17,12 +17,18 @@ on:
 
 jobs:
   desktop-build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.system.os }}
     env:
       REACT_APP_NET_TYPE_ID: ${{matrix.network.id}}
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest, ubuntu-latest]
+        system:
+          - os: "windows-latest"
+            path: "squirrel.windows/x64/"
+          - os: "macOS-latest"
+            path: ""
+          - os: ubuntu-latest
+            path: "deb/x64/"
         network:
           - id: 0
             name: "mainnet"
@@ -76,7 +82,7 @@ jobs:
       run: |
           npm audit fix --production
 
-    - if: matrix.os == 'ubuntu-latest'
+    - if: matrix.system.os == 'ubuntu-latest'
       run: |
           sudo apt-get update
           sudo apt-get install flatpak flatpak-builder elfutils
@@ -88,14 +94,15 @@ jobs:
     - name: Upload Build
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.os }}-${{ matrix.network.name }}
+        name: ${{ matrix.system.os }}-${{ matrix.network.name }}
         path: haven-desktop-app/out/make/
 
     - name: Package Desktop Build
       run: |
-        cd haven-desktop-app/out/make/
+        cd haven-desktop-app/out/make/${{ matrix.system.path }}
         ls -al
-        zip ../desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip .
+        pwd
+        zip ../desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip .
 
     - name: Upload Haven Desktop Build
       uses: a-sync/s3-uploader@master
@@ -106,17 +113,17 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: eu-west-1
         S3_BUCKET: ${{ secrets.AWS_BUCKET }}
-        FILE: haven-desktop-app/out/desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip
-        S3_KEY: binaries/desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip
+        FILE: haven-desktop-app/out/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        S3_KEY: binaries/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
     - name: notification
       env:
-        BINARY_NAME: /desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip
+        BINARY_NAME: /desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         BINARY_URL: https://docs.havenprotocol.org/binaries/
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       shell: bash
       run: |
-        export checksum=($(sha256sum ./haven-desktop-app/out/desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip))
-        export payload='{"username": "Github", "content": "GUI (${{ matrix.os }}) for ${{matrix.network.name}} : '${BINARY_URL}${GITHUB_REF_NAME}${BINARY_NAME}' (sha256 checksum : '${checksum}')"}'
+        export checksum=($(sha256sum ./haven-desktop-app/out/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip))
+        export payload='{"username": "Github", "content": "GUI (${{ matrix.system.os }}) for ${{matrix.network.name}} : '${BINARY_URL}${GITHUB_REF_NAME}${BINARY_NAME}' (sha256 checksum : '${checksum}')"}'
         echo $payload
         curl -X POST -H "Content-Type: application/json" -d "$payload" $DISCORD_WEBHOOK
 
@@ -125,8 +132,8 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./haven-desktop-app/out/desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip
-        asset_name: desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip
+        file: ./haven-desktop-app/out/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
+        asset_name: desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip
         tag: ${{ github.ref }}
         overwrite: true
         body: ""
