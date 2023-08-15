@@ -90,22 +90,10 @@ jobs:
     - name: Build Final App
       run: |
           sh './sh/make.sh'
-
-#    - name: Upload Build
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: ${{ matrix.system.os }}-${{ matrix.network.name }}
-#        path: haven-desktop-app/out/make/
-
     - name: Package Desktop Build
       run: |
         cd haven-desktop-app/out/make/${{ matrix.system.path }}
-        ls -al
-        pwd
         zip ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
-        cd ${{ github.workspace }}
-        ls -al
-        pwd
     - name: Upload Haven Desktop Build
       uses: a-sync/s3-uploader@master
       with:

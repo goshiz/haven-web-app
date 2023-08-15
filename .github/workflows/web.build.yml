@@ -68,11 +68,6 @@ jobs:
         CI: false
       run: |
           npm run build:web:ci
-#    - name: Upload web build
-#      uses: actions/upload-artifact@v3
-#      with:
-#        name: web_build-${{matrix.network.name}}
-#        path: client/build/
     - name: Package Web Build
       run: |
         cd client/build
