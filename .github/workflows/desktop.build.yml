@@ -94,6 +94,7 @@ jobs:
     - name: Package Desktop Build
       run: |
         cd haven-desktop-app/out/make/
+        ls -al
         zip ../desktop-${{ matrix.os }}-${{ matrix.network.name }}.zip .
 
     - name: Upload Haven Desktop Build
