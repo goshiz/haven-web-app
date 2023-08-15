@@ -93,7 +93,7 @@ jobs:
     - name: Package Desktop Build
       run: |
         cd haven-desktop-app/out/make/${{ matrix.system.path }}
-        zip ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
+        7z -a ${{ github.workspace }}/desktop-${{ matrix.system.os }}-${{ matrix.network.name }}.zip *
     - name: Upload Haven Desktop Build
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_KEY_ID }}
